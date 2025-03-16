@@ -17,6 +17,14 @@ func (s *Server) removeWatcher(w *watcher.Watcher) {
 	for i := range s.sessionStats {
 		if s.sessionStats[i].id == w.GetWatcherId() {
 			s.sessionStats[i].print()
+
+			// Remove the entry from the slice by replacing it with the last one
+			// and truncating the slice
+			lastIdx := len(s.sessionStats) - 1
+			s.sessionStats[i] = s.sessionStats[lastIdx]
+			s.sessionStats = s.sessionStats[:lastIdx]
+
+			break
 		}
 	}
 	// Remove watcher.

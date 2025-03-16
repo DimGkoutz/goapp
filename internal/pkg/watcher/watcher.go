@@ -57,6 +57,10 @@ func (w *Watcher) Stop() {
 
 	close(w.quitChannel)
 	w.running.Wait()
+
+	// Close the rest of the channels
+	close(w.inCh)
+	close(w.outCh)
 }
 
 func (w *Watcher) GetWatcherId() string { return w.id }

@@ -16,6 +16,10 @@ func (w *sessionStats) inc() {
 }
 
 func (s *Server) incStats(id string) {
+	// add lock to sessionStats for data safety
+	s.sessionStatsLock.Lock()
+	defer s.sessionStatsLock.Unlock()
+
 	// Find and increment.
 	for i := range s.sessionStats {
 		if s.sessionStats[i].id == id {

@@ -35,8 +35,12 @@ func (w *Watcher) Start() error {
 		defer wg.Done()
 		for {
 			select {
-			case <-w.inCh:
+			case str := <-w.inCh:
+				// added lock to ensure data safety since we are having 2 fields in the struct now
+				w.counterLock.Lock()
 				w.counter.Iteration += 1
+				w.counter.Value = str
+				w.counterLock.Unlock()
 				select {
 				case w.outCh <- w.counter:
 				case <-w.quitChannel:
@@ -74,6 +78,7 @@ func (w *Watcher) ResetCounter() {
 	defer w.counterLock.Unlock()
 
 	w.counter.Iteration = 0
+	w.counter.Value = ""
 
 	select {
 	case w.outCh <- w.counter:

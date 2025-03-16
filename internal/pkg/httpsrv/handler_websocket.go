@@ -29,7 +29,7 @@ func (s *Server) handlerWebSocket(w http.ResponseWriter, r *http.Request) {
 			origin := r.Header.Get("Origin")
 			// Allow only connections from this domain list
 			allowedOrigins := []string{
-				"http://localhost:8081",
+				"http://localhost:8080",
 			}
 			for _, allowed := range allowedOrigins {
 				if origin == allowed {
